@@ -1,0 +1,28 @@
+# Deep Learning Framework
+torch
+torchvision
+torchaudio
+
+# HuggingFace Ecosystem
+transformers
+datasets
+accelerate
+peft
+evaluate
+
+# CV & Image Processing
+Pillow
+opencv-python
+
+# Utilities
+tqdm
+numpy
+pandas
+matplotlib
+jupyterlab
+
+# NLP Metrics
+rouge_score
+sacrebleu
+jiwer
+pycocoevalcap
