@@ -18,7 +18,7 @@ class COCOCaptionDataset(Dataset):
         
         # We use Hugging Face datasets to load COCO directly. 
         # In Kaggle, this will map to their cache automatically if we configure it right.
-        self.dataset = load_dataset("HuggingFaceM4/COCO", split=split)
+        self.dataset = load_dataset("HuggingFaceM4/COCO", split=split, trust_remote_code=True)
         
         if limit:
             self.dataset = self.dataset.select(range(limit))
