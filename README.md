@@ -1,30 +1,30 @@
-# Image Captioning with Vision-Language Models (VLMs)
+# Experiment: Zero-Shot Baseline Evaluation
 
-**Computer Vision (CS6350) - TPA-19**
+## Objective
+The purpose of this branch is to establish a performance baseline for the Salesforce BLIP Vision-Language Model on the COCO dataset **before** any Parameter-Efficient Fine-Tuning (PEFT) is applied. 
 
-## Problem Statement
-This project involves implementing and fine-tuning a vision-language model for image captioning using publicly available datasets (like COCO). The model must learn to generate descriptive captions conditioned on image features using a transformer-based architecture.
+By measuring the base model's zero-shot inference capabilities, we create a quantifiable benchmark. This ensures that any subsequent LoRA fine-tuning we perform can be scientifically proven to have improved the model's accuracy on our specific domain.
 
-## Tech Stack
-*   **Frameworks:** PyTorch, Hugging Face `transformers`
-*   **Models:** BLIP, ViLT, or similar pre-trained vision-language models
-*   **Metrics:** BLEU, CIDEr, METEOR, ROUGE-L
-*   **Datasets:** COCO (Common Objects in Context)
+## Methodology
+1. **Model:** `Salesforce/blip-image-captioning-base` (Loaded in standard fp32, without LoRA adapters).
+2. **Dataset:** COCO 2014 Validation Split.
+3. **Task:** Conditional Image Generation (Captioning).
+4. **Metrics:** BLEU-4 and CIDEr (via `pycocoevalcap`).
 
-## Project Phases
-1.  **Environment Setup & Baseline Inference:** Run off-the-shelf VLM for zero-shot captioning.
-2.  **Dataset Preparation:** Load and preprocess the COCO dataset using HuggingFace `datasets`.
-3.  **Fine-tuning:** Train the model using parameter-efficient methods (PEFT/LoRA).
-4.  **Evaluation:** Calculate quantitative metrics and generate qualitative analysis.
+## Execution Instructions
+To run this baseline experiment on Kaggle or a local GPU:
 
-## Setup Instructions
+```bash
+# 1. Ensure dependencies are installed
+pip install -r requirements.txt
 
-1.  Create a virtual environment:
-    ```bash
-    python -m venv venv
-    venv\Scripts\activate
-    ```
-2.  Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+# 2. Run the evaluation script
+python src/evaluate.py
+```
+
+## Results & Findings
+*(To be populated after the Kaggle run)*
+* **BLEU-4 Score:** [TBD]
+* **CIDEr Score:** [TBD]
+
+**Hypothesis:** While the pre-trained BLIP model will generate grammatically correct English, it may struggle with the specific formatting or stylistic nuances of the COCO ground-truth captions. We expect our future LoRA fine-tuning to significantly boost the CIDEr score by adapting the model to the COCO specific style.
