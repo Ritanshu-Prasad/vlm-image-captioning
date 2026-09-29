@@ -6,7 +6,7 @@ torchao>=0.16.0
 
 # HuggingFace Ecosystem
 transformers
-datasets
+datasets<=2.19.2
 accelerate
 peft
 evaluate
