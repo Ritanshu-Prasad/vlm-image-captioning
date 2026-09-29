@@ -67,12 +67,45 @@ def main():
             generated_captions.extend(decoded_preds)
             actual_captions.extend(ground_truth)
             
+
             # Print the first item in the batch to see it working live
             print(f"\n--- Batch {step} ---")
             print(f"BLIP Guessed : {decoded_preds[0]}")
             print(f"Actual Truth : {ground_truth[0]}")
 
-    print("\nEvaluation Complete! (In the future, we will pass these lists to pycocoevalcap for BLEU scoring).")
+    print("\nEvaluation Complete! Generating Visualizations...")
+    
+    # --- VISUALIZATION BLOCK ---
+    import matplotlib.pyplot as plt
+    import textwrap
+    
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    axes = axes.flatten()
+    
+    for i in range(4):
+        sample = val_dataset[i] # Get raw item
+        raw_image = sample["image"]
+        ground_truth_cap = sample["text"]
+        
+        # Generate prediction just for this image
+        inputs = processor(images=raw_image, return_tensors="pt").to(device)
+        with torch.no_grad():
+            out = model.generate(**inputs, max_new_tokens=20)
+        pred_cap = processor.decode(out[0], skip_special_tokens=True)
+        
+        # Plot
+        axes[i].imshow(raw_image)
+        axes[i].axis("off")
+        
+        # Format text to wrap nicely
+        gt_wrap = "\n".join(textwrap.wrap(f"GT: {ground_truth_cap}", width=40))
+        pred_wrap = "\n".join(textwrap.wrap(f"Pred: {pred_cap}", width=40))
+        
+        axes[i].set_title(f"{gt_wrap}\n{pred_wrap}", fontsize=10, loc='left')
+        
+    plt.tight_layout()
+    plt.savefig("zero_shot_visualizations.png", dpi=300)
+    print("Saved visualization grid to 'zero_shot_visualizations.png'!")
 
 if __name__ == "__main__":
     main()

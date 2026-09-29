@@ -36,8 +36,8 @@ class COCOCaptionDataset(Dataset):
         
         # COCO has multiple captions per image. We can just pick the first one for simplicity, 
         # or randomly sample one during training for better robustness.
-        # The exact key depends on the dataset version, usually "sentences" -> "raw"
-        caption = item["sentences"]["raw"][0] 
+        raw_caps = item["sentences"]["raw"]
+        caption = raw_caps[0] if isinstance(raw_caps, list) else raw_caps
         
         # Ensure image is RGB (some might be grayscale)
         if image.mode != "RGB":
