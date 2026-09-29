@@ -23,10 +23,9 @@ def main():
     processor, model = get_blip_model_and_processor(use_lora=True)
     model.to(device)
 
-    # Note: limit=20 is currently set for pipeline verification. 
-    # Remove limit argument for full training run.
+    # Dataset limited to 30,000 for a 2-hour P100 Kaggle training session
     print("Loading training dataset...")
-    train_dataset = COCOCaptionDataset(split="train", limit=20) 
+    train_dataset = COCOCaptionDataset(split="train", limit=30000) 
     
     # Batch size tuned for 16GB VRAM environments
     train_loader = DataLoader(
@@ -41,7 +40,7 @@ def main():
     print("\nStarting the training loop...")
     model.train()
     
-    epochs = 1
+    epochs = 2
     for epoch in range(epochs):
         for step, batch in enumerate(train_loader):
             
