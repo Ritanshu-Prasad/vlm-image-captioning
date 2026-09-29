@@ -31,31 +31,19 @@ class COCOCaptionDataset(Dataset):
     def __getitem__(self, idx):
         item = self.dataset[idx]
         
-        # HuggingFace COCO dataset structure usually has 'image' and 'sentences'
         image = item["image"]
         
-        # COCO has multiple captions per image. We can just pick the first one for simplicity, 
-        # or randomly sample one during training for better robustness.
-        # The exact key depends on the dataset version, usually "sentences" -> "raw"
-        caption = item["sentences"]["raw"][0] 
+        raw_caps = item["sentences"]["raw"]
+        caption = raw_caps[0] if isinstance(raw_caps, list) else raw_caps
         
-        # Ensure image is RGB (some might be grayscale)
+        # Enforce RGB to prevent tensor dimension mismatch during batching
         if image.mode != "RGB":
             image = image.convert("RGB")
             
         return {"image": image, "text": caption}
 
 if __name__ == "__main__":
-    # DRY RUN / DEBUG BLOCK
-    # If you run this script directly (python src/dataset.py), it will test the dataloader.
-    
-    print("Testing Dataset Loader...")
-    # Load just 5 examples for testing
+    print("Validating Dataset Pipeline...")
     test_ds = COCOCaptionDataset(split="validation", limit=5)
-    
     sample = test_ds[0]
-    print(f"\nSuccessfully loaded image of size: {sample['image'].size}")
-    print(f"Caption: {sample['text']}")
-    
-    # You can show the image locally to verify
-    # sample['image'].show()
+    print(f"Validation successful. Output shape: {sample['image'].size}, text: {sample['text']}")
