@@ -36,11 +36,24 @@ class COCOCaptionDataset(Dataset):
         raw_caps = item["sentences"]["raw"]
         caption = raw_caps[0] if isinstance(raw_caps, list) else raw_caps
         
+        # --- CONDITIONAL GENERATION LOGIC ---
+        # We classify captions into "short" or "detailed" based on word count.
+        # By prepending this to the Ground Truth during training, the model learns
+        # to associate the prefix with the style. During inference, the user can 
+        # prompt the model with "short caption: " to force a brief description!
+        word_count = len(caption.split())
+        if word_count <= 8:
+            prefix = "short caption: "
+        else:
+            prefix = "detailed caption: "
+            
+        conditional_caption = prefix + caption
+        
         # Enforce RGB to prevent tensor dimension mismatch during batching
         if image.mode != "RGB":
             image = image.convert("RGB")
             
-        return {"image": image, "text": caption}
+        return {"image": image, "text": conditional_caption}
 
 if __name__ == "__main__":
     print("Validating Dataset Pipeline...")
