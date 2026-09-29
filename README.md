@@ -1,4 +1,4 @@
-# Stage 1: Zero-Shot Baseline Evaluation
+# Zero-Shot Baseline Evaluation
 
 This branch (`zero-shot-baseline`) contains the initial exploratory experiment for our Vision-Language Model Image Captioning project. 
 
@@ -53,7 +53,7 @@ By running the zero-shot baseline, we identified critical flaws in the foundatio
 
 **The Zero-Shot model is insufficient.** While BLIP understands basic visual concepts, it lacks the domain-specific nuance and accuracy required for high-quality COCO captioning. It struggles with scene composition and object relationships.
 
-**Transition to Stage 2:** 
+**Transition to Fine-Tuning:** 
 To fix these hallucination and counting issues, we must teach the model the specific linguistic and visual style of the COCO dataset. 
 
 Instead of retraining all 248 Million parameters (which is computationally impossible on our limited Kaggle GPUs), we will move to the `main` branch to implement **Low-Rank Adaptation (LoRA)**. This will allow us to inject and train a tiny subset of "adapter" weights (~1.1 Million parameters) to drastically improve the model's performance while maintaining a tiny memory footprint.
