@@ -4,6 +4,8 @@ This branch (`zero-shot-baseline`) contains the initial exploratory experiment f
 
 Our goal is to establish a **Zero-Shot Baseline**. We want to understand how the foundational `Salesforce/blip-image-captioning-base` model performs on the COCO dataset "out-of-the-box," before we apply any task-specific fine-tuning or LoRA adaptations.
 
+![Zero-Shot Inference Results](zero_shot_visualizations.jpg)
+
 ---
 
 ## 🏗️ Architecture Overview (Zero-Shot)
