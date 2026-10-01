@@ -23,9 +23,10 @@ def main():
     processor, model = get_blip_model_and_processor(use_lora=True)
     model.to(device)
 
-    # Dataset limited to 25,000 (which unrolls to 125,000 rows due to 5x captions)
+    # Dataset limited to 100,000 images (which unrolls to 500,000 rows due to 5x captions)
+    # This precisely maximizes the 12-hour Kaggle P100 session limit!
     print("Loading training dataset...")
-    train_dataset = COCOCaptionDataset(split="train", limit=25000) 
+    train_dataset = COCOCaptionDataset(split="train", limit=100000) 
     
     # Batch size tuned for 16GB VRAM environments
     train_loader = DataLoader(
