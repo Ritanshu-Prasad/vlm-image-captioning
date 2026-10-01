@@ -26,21 +26,28 @@ class COCOCaptionDataset(Dataset):
         print(f"Loaded {len(self.dataset)} examples.")
 
     def __len__(self):
-        return len(self.dataset)
+        # We mathematically multiply the dataset size by 5.
+        # This allows us to use all 5 human annotations per image!
+        return len(self.dataset) * 5
 
     def __getitem__(self, idx):
-        item = self.dataset[idx]
+        # Map the artificially expanded index back to the real image index
+        image_idx = idx // 5
+        caption_idx = idx % 5
         
+        item = self.dataset[image_idx]
         image = item["image"]
         
         raw_caps = item["sentences"]["raw"]
-        caption = raw_caps[0] if isinstance(raw_caps, list) else raw_caps
+        
+        # Fallback if the dataset row surprisingly has less than 5 captions
+        if isinstance(raw_caps, list):
+            safe_cap_idx = min(caption_idx, len(raw_caps) - 1)
+            caption = raw_caps[safe_cap_idx]
+        else:
+            caption = raw_caps
         
         # --- CONDITIONAL GENERATION LOGIC ---
-        # We classify captions into "short" or "detailed" based on word count.
-        # By prepending this to the Ground Truth during training, the model learns
-        # to associate the prefix with the style. During inference, the user can 
-        # prompt the model with "short caption: " to force a brief description!
         word_count = len(caption.split())
         if word_count <= 8:
             prefix = "short caption: "

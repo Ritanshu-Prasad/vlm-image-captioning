@@ -23,10 +23,9 @@ def main():
     processor, model = get_blip_model_and_processor(use_lora=True)
     model.to(device)
 
-    # Note: limit=20 is currently set for pipeline verification. 
-    # Remove limit argument for full training run.
+    # Dataset limited to 25,000 (which unrolls to 125,000 rows due to 5x captions)
     print("Loading training dataset...")
-    train_dataset = COCOCaptionDataset(split="train", limit=20) 
+    train_dataset = COCOCaptionDataset(split="train", limit=25000) 
     
     # Batch size tuned for 16GB VRAM environments
     train_loader = DataLoader(
