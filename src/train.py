@@ -42,6 +42,8 @@ def main():
     model.train()
     
     epochs = 1
+    accumulation_steps = 8 # Effective batch size = 2 * 8 = 16
+    
     for epoch in range(epochs):
         for step, batch in enumerate(train_loader):
             
@@ -49,7 +51,7 @@ def main():
             attention_mask = batch["attention_mask"].to(device)
             pixel_values = batch["pixel_values"].to(device)
             
-            # Forward pass: labels=input_ids for autoregressive generation loss
+            # Forward pass
             outputs = model(
                 input_ids=input_ids, 
                 attention_mask=attention_mask,
@@ -57,14 +59,18 @@ def main():
                 labels=input_ids
             )
             
-            loss = outputs.loss
+            # Scale the loss because we are accumulating gradients over multiple steps
+            loss = outputs.loss / accumulation_steps
             loss.backward()
             
-            optimizer.step()
-            optimizer.zero_grad()
+            # Only update the weights after accumulating gradients for 'accumulation_steps'
+            if (step + 1) % accumulation_steps == 0:
+                optimizer.step()
+                optimizer.zero_grad()
             
-            if step % 2 == 0:
-                print(f"Epoch: {epoch} | Step: {step} | Loss: {loss.item():.4f}")
+            if step % 10 == 0:
+                # Multiply back by accumulation_steps just for the print readout so it looks normal
+                print(f"Epoch: {epoch} | Step: {step} | Loss: {(loss.item() * accumulation_steps):.4f}")
                 
     print("\nTraining complete! Saving LoRA adapter weights...")
     output_dir = "./lora_weights"
