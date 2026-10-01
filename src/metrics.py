@@ -76,8 +76,13 @@ def main():
     rouge_calc = evaluate.load("rouge")
     meteor_calc = evaluate.load("meteor")
     
+    # Import our custom VTAS metric
+    from vtas_metric import VTASMetric
+    vtas_calc = VTASMetric(device=device)
+    
     predictions = []
     references = []
+    vtas_scores = []
     
     print("Evaluating model over validation subset...")
     for i in tqdm(range(len(val_dataset))):
@@ -96,15 +101,21 @@ def main():
         # For standard metric calculation, references need to be a list of lists
         references.append([ground_truth])
         
+        # Calculate VTAS for this specific image and prediction
+        vtas_result = vtas_calc.compute(image, pred)
+        vtas_scores.append(vtas_result["vtas_score"])
+        
     print("\nCalculating Final Scores...")
     bleu_score = bleu_calc.compute(predictions=predictions, references=references)
     rouge_score = rouge_calc.compute(predictions=predictions, references=references)
     meteor_score = meteor_calc.compute(predictions=predictions, references=references)
+    avg_vtas = sum(vtas_scores) / len(vtas_scores) if vtas_scores else 0.0
     
     print("\n================ FINAL RESULTS ================")
     print(f"BLEU-4: {bleu_score['bleu']:.4f}")
     print(f"ROUGE-L: {rouge_score['rougeL']:.4f}")
     print(f"METEOR: {meteor_score['meteor']:.4f}")
+    print(f"VTAS: {avg_vtas:.4f}")
     print("===============================================")
 
 if __name__ == "__main__":
