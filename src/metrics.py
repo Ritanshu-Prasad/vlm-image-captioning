@@ -77,8 +77,8 @@ def main():
     meteor_calc = evaluate.load("meteor")
     
     # Import our custom VTAS metric
-    from vtas_metric import VTASMetric
-    vtas_calc = VTASMetric(device=device)
+    from vtas import VTASEvaluator
+    vtas_calc = VTASEvaluator()
     
     predictions = []
     references = []
@@ -102,7 +102,7 @@ def main():
         references.append([ground_truth])
         
         # Calculate VTAS for this specific image and prediction
-        vtas_result = vtas_calc.compute(image, pred)
+        vtas_result = vtas_calc.score(image, pred)
         vtas_scores.append(vtas_result["vtas_score"])
         
     print("\nCalculating Final Scores...")
