@@ -63,10 +63,15 @@ def main():
     plt.figure(figsize=(8, 8))
     plt.imshow(raw_image)
     plt.axis("off")
-    title = f"Conditional LoRA Results:\n\nShort Prompt: '{pred_short}'\nDetailed Prompt: '{pred_detailed}'"
+    
+    # Wrap text to prevent cutting off
+    wrapped_short = textwrap.fill(pred_short, width=60)
+    wrapped_detailed = textwrap.fill(pred_detailed, width=60)
+    
+    title = f"Conditional LoRA Results:\n\nShort Prompt: '{wrapped_short}'\nDetailed Prompt: '{wrapped_detailed}'"
     plt.title(title, fontsize=12, loc='left')
     plt.tight_layout()
-    plt.savefig(f"conditional_lora_results.png", dpi=300)
+    plt.savefig(f"conditional_lora_results.png", dpi=300, bbox_inches="tight")
     print("Saved visual proof to 'conditional_lora_results.png'!")
 
     # 2. QUANTITATIVE METRICS (BLEU, ROUGE, METEOR)
