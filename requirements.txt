@@ -29,3 +29,4 @@ jiwer
 pycocoevalcap
 spacy
 sentence_transformers
+gradio>=4.0.0
