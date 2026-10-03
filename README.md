@@ -1,6 +1,5 @@
-# Project TrueSight: Instruction-Tuned VLMs (TPA-19)
+# Project TrueSight: Instruction-Tuned VLMs 
 
-**Computer Vision (CS6350) - TPA-19**
 
 ## 📖 Overview
 Project TrueSight is a comprehensive Machine Learning pipeline designed to combat **"Visual Dominance"** in Vision-Language Models (VLMs). We discovered that standard Foundation Models (like BLIP) often ignore text instructions (e.g., "short caption:" vs "detailed caption:") because their visual encoders overpower their text encoders. 
