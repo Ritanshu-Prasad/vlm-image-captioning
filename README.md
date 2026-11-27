@@ -1,6 +1,13 @@
 # Project TrueSight: Instruction-Tuned VLMs 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://truesight-vlm.streamlit.app)
 
+> **Status:** the results below come from the original evaluation, and a later review found problems that affect them:
+> - the training loss also covered padding and the prompt prefix;
+> - the five-fold "unrolling" most likely repeated each dataset row rather than adding new captions;
+> - validation compared each output with a single reference caption.
+>
+> Corrected training and evaluation are in progress ([#16](https://github.com/Ritanshu-Prasad/vlm-image-captioning/issues/16), [#17](https://github.com/Ritanshu-Prasad/vlm-image-captioning/issues/17), [#18](https://github.com/Ritanshu-Prasad/vlm-image-captioning/issues/18)). This README will be updated with the corrected numbers ([#19](https://github.com/Ritanshu-Prasad/vlm-image-captioning/issues/19)).
+
 ## 📖 Overview
 Project TrueSight is a comprehensive Machine Learning pipeline designed to combat **"Visual Dominance"** in Vision-Language Models (VLMs). We discovered that standard Foundation Models (like BLIP) often ignore text instructions (e.g., "short caption:" vs "detailed caption:") because their visual encoders overpower their text encoders. 
 
